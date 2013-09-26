@@ -2,15 +2,7 @@
 
 
 
-
-
-
-
     <head>
-
-
-
-
 
 
 
@@ -18,15 +10,7 @@
 
 
 
-
-
-
-
         <link rel="stylesheet" href="jquery/jquery.mobile-1.1.0.min.css" />
-
-
-
-
 
 
 
@@ -34,15 +18,7 @@
 
 
 
-
-
-
-
        
-
-
-
-
 
 
 
@@ -50,15 +26,7 @@
 
 
 
-
-
-
-
         <script src="jquery/jquery.mobile-1.1.0.js"></script>
-
-
-
-        
 
 
 
@@ -78,11 +46,7 @@
 
 
 
-			$.getScript("phonegap.js");
-
-
-
-			$.getScript("PushNotification.js");			
+			$.getScript("phonegap.js");			
 
 
 
@@ -98,23 +62,7 @@
 
 
 
-        <script src="http://maps.google.com/maps/api/js?libraries=places&region=uk&language=en&sensor=true"></script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
 
 
 
@@ -126,15 +74,7 @@
 
 
 
-
-
-
-
-            var markersArray = [];
-
-
-
-
+	                        
 
 
 
@@ -142,107 +82,11 @@
 
 
 
+                //	 alert("1");
 
 
 
-
-                
-
-
-
-                var maphigh = $.mobile.activePage.height() - $.mobile.activePage.children('[data-role="footer"]').height() - 20;
-
-
-
-
-
-
-
-                $("#map").css('height', maphigh);
-
-
-
-
-
-
-
-                var mapOptions = {
-
-
-
-
-
-
-
-                    zoom: 8,
-
-
-
-
-
-
-
-                    center: new google.maps.LatLng(21.910082, 39.118452),
-
-
-
-
-
-
-
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-
-
-
-
-
-
-
-                };
-
-
-
-
-
-
-
-                var mapDiv = document.getElementById("map");
-
-
-
-
-
-
-
-                console.log(mapDiv);
-
-
-
-
-
-
-
-                map = new google.maps.Map(mapDiv, mapOptions);
-
-
-
-
-
-
-
-                addMarkerForAddress();
-
-
-
-
-
-
-
-
-
-
-
-
+                document.addEventListener("deviceready",onDeviceReadyCheckNetwork,false);
 
 
 
@@ -250,119 +94,43 @@
 
 
 
+    
 
 
 
+            function onDeviceReadyCheckNetwork() {
 
 
 
+                // alert("2");
 
 
-          
 
+                var networkState = navigator.network.connection.type;
 
 
 
+                if (networkState===Connection.UNKNOWN){
 
 
 
-            function addMarkerForAddress() {
+                    alert ("It appears you are currently not connected to the Internet. Please establish a connection and try again.");
 
 
 
+                }
 
 
 
+                else if (networkState===Connection.NONE){
 
 
 
+                    alert ("It appears you are currently not connected to the Internet. Please establish a connection and try again.");
 
 
 
-
-
-
-                var address = $("#address").val();
-
-
-
-
-
-
-
-                var geocoder = new google.maps.Geocoder();
-
-
-
-
-
-
-
-                geocoder.geocode({'address': address}, function(results, status) {
-
-
-
-
-
-
-
-                    if (status == google.maps.GeocoderStatus.OK) {
-
-
-
-
-
-
-
-                        var returnedValue = results[0].geometry.location;
-
-
-
-
-
-
-
-                        addMarker(returnedValue);
-
-
-
-
-
-
-
-                    } else {
-
-
-
-
-
-
-
-                        console.log("Geocode was not successful for the following reason: " + status);
-
-
-
-
-
-
-
-                    }
-
-
-
-
-
-
-
-                });
-
-
-
-
-
-
-
-
+                }
 
 
 
@@ -374,159 +142,67 @@
 
 
 
+        </script>
 
 
 
-
-            function addMarker(latLng, title, contentString) {
-
+        <script type="text/javascript" src="jquery.youtube.channel2.js"></script>
 
 
 
+        <script type="text/javascript" charset="utf-8" src="video.js"></script>
 
 
 
-                map.panTo(latLng);
+        <script type="text/javascript">
 
 
 
+	                        
 
 
 
-
-                var markerOptions = new google.maps.Marker({
-
+            $(document).ready(function() {
 
 
 
+                document.addEventListener("deviceready",onDeviceReadyVideoPlayer,false);
 
 
 
-                    map: map,
+            });
 
 
 
+    
 
 
 
-
-                    position: latLng,
-
+            function onDeviceReadyVideoPlayer() {
 
 
 
+                $("a.open-plugin-videoplayer").click(function() {
 
 
 
-                    title: title,
+                    var vidGoUrl = $(this).attr("data-vidurl");
 
 
 
+                    window.plugins.videoPlayer.play(vidGoUrl);
 
 
 
-
-                    clickable: true
-
-
-
-
+                    return false;
 
 
 
                 });
-
-
-
-
-
-
-
-                var marker = new google.maps.Marker(markerOptions);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                var infoWindowOptions = {
-
-
-
-
-
-
-
-                    content: contentString,
-
-
-
-
-
-
-
-                    position: latLng
-
-
-
-
-
-
-
-                };
-
-
-
-
-
-
-
-                var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-
-
-
-
-
-
-
-                google.maps.event.addListener(marker, "click", function() {
-
-
-
-
-
-
-
-                    infoWindow.open(map);
-
-
-
-
-
-
-
-                });
-
-
-
-
 
 
 
             }
-
-
-
-
 
 
 
@@ -535,6 +211,62 @@
 
 
 
+
+
+
+
+
+
+
+        <script type="text/javascript">    
+
+
+
+            $(document).ready(function() {
+
+
+
+                $('#youtubevideos').youTubeChannel({ 
+
+
+
+                    userName: 'bonsai', 
+
+
+
+                    channel: "uploads", 
+
+
+
+                    hideAuthor: true,
+
+
+
+                    numberToDisplay: 30,
+
+
+
+                    linksInNewWindow: true
+
+
+
+                    /*other options*/
+
+
+
+                    /*loadingText: "Loading...",   */                 
+
+
+
+                },"android");
+
+
+
+            });            
+
+
+
+        </script>
 
 
 
@@ -674,19 +406,7 @@
 
 
 
-
-
-
-
     <body>
-
-
-
-
-
-
-
-
 
 
 
@@ -702,27 +422,11 @@
 
 
 
-
-
-
-
-
-
-
-
             <div data-role="header">
 
 
 
-
-
-
-
-                <div class="ui-bar ui-bar-a"><center><h1>Location</h1></center>
-
-
-
-
+                <div class="ui-bar ui-bar-a"><center><h1>Youtube</h1></center>
 
 
 
@@ -730,15 +434,7 @@
 
 
 
-
-
-
-
             </div>
-
-
-
-
 
 
 
@@ -746,15 +442,7 @@
 
 
 
-
-
-
-
             <style type="text/css"> 
-
-
-
-
 
 
 
@@ -762,15 +450,7 @@
 
 
 
-
-
-
-
                 #homeButton:active{ opacity: 0.7; } 
-
-
-
-
 
 
 
@@ -782,47 +462,7 @@
 
 
 
-
-
-
-
-
-
-
-
-            <div data-role="content">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <input id="address" type="hidden" value="New Jersey,07936"/>
-
-
-
-
-
-
-
-                <div id="map" style="height: 100%;width: 100%;"></div>
-
-
-
-
-
-
-
-
+            <div data-role="content" id="youtubevideos">
 
 
 
@@ -838,27 +478,15 @@
 
 
 
+            <style type="text/css" >
 
 
 
+                .nav-glyphish-example .ui-btn .ui-btn-inner { padding-top: 40px !important; width: 60px!important;}		.nav-glyphish-example .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }#tab1 .ui-icon { background:  url("icons_tech_1579.png") 50% 50% no-repeat; background-size: 50px 50px; }#tab2 .ui-icon { background:  url("icons_communication_1092.png") 50% 50% no-repeat; background-size: 50px 50px; }  a[href="content1.html"] .ui-icon { background:  url("icon(166).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="aboutUs.html"] .ui-icon { background:  url("icon(171).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="https://mobile.twitter.com/search?q=bonsai"] .ui-icon { background:  url("icon(388).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="http://m.facebook.com/bonsaiempire?v=feed"] .ui-icon { background:  url("icon(356).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="youtubeKeywords.html"] .ui-icon { background:  url("icon(380).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; } #tab3 .ui-icon { background:  url("64Px_-_504-11.png") 50% 50% no-repeat; background-size: 30px 30px; }#tab4 .ui-icon { background:  url("64Px_-_504-210.png") 50% 50% no-repeat; background-size: 30px 30px; }#tab5 .ui-icon { background:  url("more.png") 50% 50% no-repeat; background-size: 30px 30px; }
 
 
 
-
-
-
-
-
-
-
-
-
-
-            <style> .nav-glyphish-example .ui-btn .ui-btn-inner { padding-top: 40px !important; width: 60px!important;}		.nav-glyphish-example .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }#tab1 .ui-icon { background:  url("icons_tech_1579.png") 50% 50% no-repeat; background-size: 50px 50px; }#tab2 .ui-icon { background:  url("icons_communication_1092.png") 50% 50% no-repeat; background-size: 50px 50px; }  a[href="content1.html"] .ui-icon { background:  url("icon(166).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="aboutUs.html"] .ui-icon { background:  url("icon(171).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="https://mobile.twitter.com/search?q=bonsai"] .ui-icon { background:  url("icon(388).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="http://m.facebook.com/bonsaiempire?v=feed"] .ui-icon { background:  url("icon(356).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; }   a[href="youtubeKeywords.html"] .ui-icon { background:  url("icon(380).png") 50% 50% no-repeat !important;background-size: 30px 30px !important; } #tab3 .ui-icon { background:  url("64Px_-_504-11.png") 50% 50% no-repeat; background-size: 30px 30px; }#tab4 .ui-icon { background:  url("64Px_-_504-210.png") 50% 50% no-repeat; background-size: 30px 30px; }#tab5 .ui-icon { background:  url("more.png") 50% 50% no-repeat; background-size: 30px 30px; }</style>
-
-
-
-
+            </style>
 
 
 
@@ -866,23 +494,11 @@
 
 
 
-
-
-
-
-        </div>
-
-
-
-
+        </div>	
 
 
 
     </body>
-
-
-
-
 
 
 
